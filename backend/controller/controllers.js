@@ -1,6 +1,6 @@
 import conexion from "../database/connection.js";
 
-const getLibros = async (req, res)=>{
+const get = async (req, res)=>{
     try {
         const db = await conexion();
 
@@ -16,7 +16,7 @@ const getLibros = async (req, res)=>{
     }
 }
 
-const getOneLibro = async (req, res)=>{
+const getOne = async (req, res)=>{
     try {
         const db = await conexion();
 
@@ -33,7 +33,7 @@ const getOneLibro = async (req, res)=>{
     }
 }
 
-const postLibro = async (req, res)=>{
+const post = async (req, res)=>{
     try {
         const db = await conexion();
 
@@ -65,44 +65,56 @@ const postLibro = async (req, res)=>{
             const newUser = await coleccion.insertOne(req.body);
 
             res.json(newUser);
+        } else if (colection == 'generos'){
+            const nombre = await coleccion.find({nombre : req.body.nombre}).toArray();
+
+            if (nombre[0]){
+                return res.status(400).json({
+                    ms : "La categoria ya se encuentra registrada"
+                })
+            }
+
+            const newGenre = await coleccion.insertOne(req.body);
+
+            res.json(newGenre);
         }
     } catch (error) {
         res.stauts(400).json(error.message);
     }
 }
 
-const updateLibro = async (req, res)=>{
+const update = async (req, res)=>{
     try {
         const db = await conexion();
-        const coleccion = db.collection('libros');
 
-        const data = req.body;
-        const id = req.params.id;
+        const {colection} = req.params;
+        const id = parseInt(req.params.id);
 
-        const objId = new ObjectId(id);
+        const coleccion = db.collection(colection);
 
-        await coleccion.findOneAndUpdate({_id : objId}, {$set : data});
+        await coleccion.findOneAndUpdate({id}, {$set : req.body});
 
         res.json({
-            msg : "Libro actualizado"
+            msg : "Documento actualizado"
         });
     } catch (error) {
         res.status(400).json(error.message);
     }
 }
 
-const delLibro = async (req, res)=>{
+const deleter = async (req, res)=>{
     try {
         const db = await conexion();
-        const coleccion = db.collection('libros');
 
-        const id = req.params.id;
-        const objId = new ObjectId(id);
+        const {colection} = req.params;
+        const id = parseInt(req.params.id);
 
-        await coleccion.deleteOne({_id : objId});
+        const coleccion = db.collection(colection);
+
+        await coleccion.findOneAndDelete({id});
 
         res.json({
-            msg : "Libro eliminado exitosamente"
+            msg : "Documento eliminado exitosamente"
         });
     } catch (error) {
         res.status(400).json(error.message);
@@ -110,9 +122,9 @@ const delLibro = async (req, res)=>{
 }
 
 export {
-    getLibros,
-    getOneLibro,
-    postLibro,
-    updateLibro,
-    delLibro
+    get,
+    getOne,
+    post,
+    update,
+    deleter
 }

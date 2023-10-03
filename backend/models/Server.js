@@ -4,7 +4,7 @@ import swaggerJSDoc from "swagger-jsdoc";
 import path from "path";
 import {fileURLToPath} from 'url';
 
-import librosRouter from "../routes/libros.routes.js";
+import librosRouter from "../routes/routes.js";
 import swaggerDocument from "../swagger/version(1.0).json" assert {type: "json"};
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,7 +20,7 @@ class Server{
         this.middlewares();
 
         this.rutas = {
-            libros : '/books'
+            api : '/api'
         }
 
         this.routes();
@@ -38,7 +38,7 @@ class Server{
     }
 
     routes(){
-        this.app.use(this.rutas.libros, librosRouter);
+        this.app.use(this.rutas.api, librosRouter);
     }
 }
 
