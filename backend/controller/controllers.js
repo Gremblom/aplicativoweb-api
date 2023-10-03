@@ -1,11 +1,12 @@
-import {ObjectId} from "mongodb";
-
 import conexion from "../database/connection.js";
 
 const getLibros = async (req, res)=>{
     try {
         const db = await conexion();
-        const coleccion = db.collection('libros');
+
+        const {colection} = req.params;
+
+        const coleccion = db.collection(colection);
 
         const result = await coleccion.find().toArray();
 
@@ -18,13 +19,13 @@ const getLibros = async (req, res)=>{
 const getOneLibro = async (req, res)=>{
     try {
         const db = await conexion();
-        const coleccion = db.collection('libros');
 
-        const id = req.params.id;
+        const {colection} = req.params;
+        const id = parseInt(req.params.id);
 
-        const objId = new ObjectId(id);
+        const coleccion = db.collection(colection);
 
-        const result = await coleccion.find({_id : objId}).toArray();
+        const result = await coleccion.find({id}).toArray();
 
         res.json(result);
     } catch (error) {
@@ -35,25 +36,36 @@ const getOneLibro = async (req, res)=>{
 const postLibro = async (req, res)=>{
     try {
         const db = await conexion();
-        const coleccion = db.collection('libros');
 
-        const nombre = await coleccion.find({"nombre" : req.body.nombre}).toArray();
+        const {colection} = req.params;
 
-        if (nombre[0]){
-            return res.status(400).json({
-                ms : "El libro ya se encuentra registrado"
-            })
-        }
+        const coleccion = db.collection(colection);
 
-        const newLibro = await coleccion.insertOne({
-            "nombre" : req.body.nombre,
-            "genero" : req.body.genero,
-            "autor" : req.body.autor,
-            "sinopsis" : req.body.sinopsis,
-            "estado" : req.body.estado
-        })
+        if (colection == 'libros'){
+            const nombre = await coleccion.find({nombre : req.body.nombre}).toArray();
+
+            if (nombre[0]){
+                return res.status(400).json({
+                    ms : "El libro ya se encuentra registrado"
+                })
+            }
     
-        res.json(newLibro);
+            const newLibro = await coleccion.insertOne(req.body)
+
+            res.json(newLibro);
+        } else if (colection == 'usuarios'){
+            const correo = await coleccion.find({correo : req.body.correo}).toArray();
+
+            if (correo[0]){
+                return res.status(400).json({
+                    ms : "El correo ya se encuentra registrado"
+                })
+            }
+
+            const newUser = await coleccion.insertOne(req.body);
+
+            res.json(newUser);
+        }
     } catch (error) {
         res.stauts(400).json(error.message);
     }
