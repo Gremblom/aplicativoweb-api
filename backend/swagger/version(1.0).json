@@ -1,0 +1,68 @@
+{
+    "openapi": "3.0.0",
+      "info": {
+        "title": "Basic API",
+        "version": "1.0.1",
+        "description": "A basic API that has toppings as a collection"
+      },
+    "servers": [
+      {
+        "url": "http://localhost:6996",
+        "description": "Localhost Server for testing the API"
+      }
+    ],
+    "paths":{
+        "/books/all":{
+            "get":{
+                "tags":[
+                    "books"
+                ],
+                "summary": "Get all books",
+                "description": "Obtiene una lista con todos los libros registrados",
+                "parameters": [],
+                "responses":{
+                    "200":{
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type" : "array",
+                                    "items": {
+                                        "$ref" : "no schema defined"
+                                    },
+                                    "example": {
+                                        "books": [
+                                            {
+                                                "_id": "1234",
+                                                "nombre": "Harry Potter",
+                                                "genero": "Fantasia",
+                                                "sinopsis": "La historia de Harry en su travesía por Hogwarts",
+                                                "estado": "Disponible"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Not ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "no schema defined"
+                                    },
+                                    "example":{
+                                        "error": "(Error message displayed)"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
