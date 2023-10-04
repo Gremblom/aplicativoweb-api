@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {Link} from "react-router-dom";
 
 import '../../assets/card.css';
 import {Read} from '../API/API';
@@ -9,6 +10,9 @@ export default function Card(){
   
   return(
     <div className='bodyContainer'>
+      <div>
+      <Link to="/createBook"><button className="btn">Create</button></Link>
+      </div>
       {APIData.map((data)=>{
         return(
           <div className="card">
@@ -19,7 +23,7 @@ export default function Card(){
               <p className="para">{data.sinopsis}</p>
               <p className="para">{data.estado}</p>
               <div className='buttons'>
-                <button className="btn">Delete</button>
+                <Link to="/createBook"><button className="btn">Delete</button></Link>
                 <button className="btn">Update</button>
               </div>
             </div>

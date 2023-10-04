@@ -29,6 +29,25 @@
     line-height: 1.5;
   }
   
+  .btn {
+    color: #e8e8e8;
+    text-decoration: none;
+    padding: 10px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(-45deg, #445D48 0%, #D6CC99 100% );
+    border-radius: 5px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    transition: 0.2s;
+  }
+
+  .btn:hover {
+    color: #212121;
+    background: #e8e8e8;
+    transition: 0.2s;
+  }
+
   .content .btn {
     color: #e8e8e8;
     text-decoration: none;

@@ -7,6 +7,7 @@ import UserCard from "./components/usuarios/Card";
 import RentaCard from "./components/rentas/Card";
 import GeneroCard from "./components/generos/Card";
 import InventarioCard from "./components/inventario/Card";
+import BookForm from "./components/libros/CreateForm";
 import Header from "./components/Header";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         </div>
         <div>
           <Route exact path='/' component={BookCard} />
+          <Route exact path='/createBook' component={BookForm} />
         </div>
         <div>
           <Route exact path='/libros' component={BookCard} />
