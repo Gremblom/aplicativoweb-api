@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 import './App.css';
 
 import BookCard from "./components/libros/Card";
@@ -16,6 +16,9 @@ function App() {
       <div className='main'>
         <div className='headerContainer'>
           <Header />
+        </div>
+        <div>
+          <Route exact path='/' component={BookCard} />
         </div>
         <div>
           <Route exact path='/libros' component={BookCard} />
