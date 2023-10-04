@@ -1,0 +1,33 @@
+.headerBar{
+    display: grid;
+    grid-template-columns: 20% 80%;
+    background: linear-gradient(-45deg, #001524 0%, #D6CC99 100% );
+}
+
+.links{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.links a{
+    color: #212121;
+    text-decoration: none;
+    padding: 10px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    background: #FDE5D4;
+    border-radius: 5px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    transition: 0.2s;
+}
+
+.links a:hover {
+    outline: 2px solid #e8e8e8;
+    background: transparent;
+    color: #e8e8e8;
+    transition: 0.2s;
+}

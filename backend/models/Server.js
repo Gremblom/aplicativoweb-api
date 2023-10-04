@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import swaggerUI from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
 import path from "path";
@@ -17,6 +18,10 @@ class Server{
 
         this.port = process.env.PORT;
 
+        this.configCors = {
+            methods : ["GET", "POST", "PUT", "PATCH", "DELETE"]
+        }
+
         this.middlewares();
 
         this.rutas = {
@@ -33,6 +38,7 @@ class Server{
     }
 
     middlewares(){
+        this.app.use(cors(this.configCors));
         this.app.use(express.json());
         this.app.use("/api-doc", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
     }
