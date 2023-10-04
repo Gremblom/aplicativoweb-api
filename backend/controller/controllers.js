@@ -6,11 +6,35 @@ const get = async (req, res)=>{
 
         const {colection} = req.params;
 
-        const coleccion = db.collection(colection);
+        if (colection == 'libros'){
+            const coleccion = db.collection(colection);
 
-        const result = await coleccion.find().toArray();
+            const result = await coleccion.aggregate([
+                {$lookup : {
+                    from : 'generos',
+                    localField : 'genero',
+                    foreignField : 'id',
+                    as : 'genero'
+                }},
+                {$project : {
+                    _id : 0,
+                    nombre : 1,
+                    genero : 1,
+                    autor : 1,
+                    sinopsis : 1,
+                    estado : 1,
+                    genero : "$genero.nombre"
+                }}
+            ]).toArray();
 
-        res.json(result);
+            res.json(result);
+        } else {
+            const coleccion = db.collection(colection);
+
+            const result = await coleccion.find().toArray();
+
+            res.json(result);
+        }
     } catch (error) {
         res.status(404).json(error.message);
     }

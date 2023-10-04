@@ -5,7 +5,8 @@ import swaggerJSDoc from "swagger-jsdoc";
 import path from "path";
 import {fileURLToPath} from 'url';
 
-import librosRouter from "../routes/routes.js";
+import generalRouter from "../routes/routes.js";
+import stockLibrosRouter from "../routes/specific.routes.js";
 import swaggerDocument from "../swagger/version(1.0).json" assert {type: "json"};
 
 const __filename = fileURLToPath(import.meta.url);
@@ -25,7 +26,8 @@ class Server{
         this.middlewares();
 
         this.rutas = {
-            api : '/api'
+            api : '/api',
+            apiSpfc : '/apiSpfc'
         }
 
         this.routes();
@@ -44,7 +46,8 @@ class Server{
     }
 
     routes(){
-        this.app.use(this.rutas.api, librosRouter);
+        this.app.use(this.rutas.api, generalRouter);
+        this.app.use(this.rutas.apiSpfc, stockLibrosRouter)
     }
 }
 

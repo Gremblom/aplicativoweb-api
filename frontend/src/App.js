@@ -4,6 +4,9 @@ import './App.css';
 
 import BookCard from "./components/libros/Card";
 import UserCard from "./components/usuarios/Card";
+import RentaCard from "./components/rentas/Card";
+import GeneroCard from "./components/generos/Card";
+import InventarioCard from "./components/inventario/Card";
 import Header from "./components/Header";
 
 function App() {
@@ -19,6 +22,15 @@ function App() {
         </div>
         <div>
           <Route exact path='/usuarios' component={UserCard} />
+        </div>
+        <div>
+          <Route exact path='/rentas' component={RentaCard} />
+        </div>
+        <div>
+          <Route exact path='/generos' component={GeneroCard} />
+        </div>
+        <div>
+          <Route exact path='/inventario' component={InventarioCard} />
         </div>
       </div>
     </Router>

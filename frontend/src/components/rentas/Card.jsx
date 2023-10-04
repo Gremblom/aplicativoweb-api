@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React from 'react';
 
 import '../../assets/card.css';
-import {Read} from '../API/API';
+import {Read} from '../API/APISpecial';
 
 export default function Card(){
 
-  const APIData = Read('libros');
+  const APIData = Read('rentas');
   
   return(
     <div className='bodyContainer'>
@@ -13,11 +13,9 @@ export default function Card(){
         return(
           <div className="card">
             <div className="content">
-              <p className="heading" >{data.nombre}</p>
-              <p className="para">{data.autor}</p>
-              <p className="para">{data.genero[0]}</p>
-              <p className="para">{data.sinopsis}</p>
-              <p className="para">{data.estado}</p>
+              <p className="heading" >{data.id}</p>
+              <p className="para">{data.libroNombre[0]}</p>
+              <p className="para">{data.usuarioNombre[0]}</p>
               <div className='buttons'>
                 <button className="btn">Delete</button>
                 <button className="btn">Update</button>
