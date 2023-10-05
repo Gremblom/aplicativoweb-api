@@ -1,4 +1,10 @@
-
+.bodyPage{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 2rem;
+}
 
 .bodyContainer{
     margin: 5rem;

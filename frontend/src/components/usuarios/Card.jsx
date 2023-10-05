@@ -18,25 +18,27 @@ export default function Card(){
   } 
 
   return(
-    <div className='bodyContainer'>
+    <div className='bodyPage'>
       <div>
       <Link to="/createUser"><button className="btn">Create</button></Link>
       </div>
-      {APIData.map((data)=>{
-        return(
-          <div className="card">
-            <div className="content">
-              <p className="heading" >{data.nombre}</p>
-              <p className="para">{data.correo}</p>
-              <p className="para">{data.edad} años</p>
-              <div className='buttons'>
-              <button className="btn" onClick={() => Borrar('usuarios', data.id)}>Delete</button>
-                <button class="btn">Update</button>
+      <div className='bodyContainer'>
+        {APIData.map((data)=>{
+          return(
+            <div className="card">
+              <div className="content">
+                <p className="heading" >{data.nombre}</p>
+                <p className="para">{data.correo}</p>
+                <p className="para">{data.edad} años</p>
+                <div className='buttons'>
+                <button className="btn" onClick={() => Borrar('usuarios', data.id)}>Delete</button>
+                  <button class="btn">Update</button>
+                </div>
               </div>
             </div>
-          </div>
-        )
-      })}
+          )
+        })}
+      </div>
     </div>
   )
 }

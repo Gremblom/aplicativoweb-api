@@ -58,6 +58,23 @@ const getOne = async (req, res)=>{
     }
 }
 
+const newStock = async (data)=>{
+    try {
+        const db = await conexion();
+
+        const coleccion = db.collection('stockLibros');
+    
+        await coleccion.insertOne({
+            id : data.id,
+            id_libro : data.id,
+            cantidad_disponible : 10,
+            precio_unitario : 15.99
+        })   
+    } catch (error) {
+        return error;
+    }
+}
+
 const post = async (req, res)=>{
     try {
         const db = await conexion();
@@ -74,8 +91,10 @@ const post = async (req, res)=>{
                     ms : "El libro ya se encuentra registrado"
                 })
             }
-    
-            const newLibro = await coleccion.insertOne(req.body)
+
+            const newLibro = await coleccion.insertOne(req.body);
+
+            newStock(req.body);
 
             res.json(newLibro);
         } else if (colection == 'usuarios'){
@@ -90,6 +109,8 @@ const post = async (req, res)=>{
             const newUser = await coleccion.insertOne(req.body);
 
             res.json(newUser);
+
+ 
         } else if (colection == 'generos'){
             const nombre = await coleccion.find({nombre : req.body.nombre}).toArray();
 
@@ -131,6 +152,18 @@ const update = async (req, res)=>{
     }
 }
 
+const delInv = async (id)=>{
+    try {
+        const db = await conexion();
+
+        const coleccion = db.collection('stockLibros');
+
+        await coleccion.findOneAndDelete({id});
+    } catch (error) {
+        return error;
+    }
+}
+
 const deleter = async (req, res)=>{
     try {
         const db = await conexion();
@@ -143,6 +176,10 @@ const deleter = async (req, res)=>{
         console.log(id);
 
         await coleccion.findOneAndDelete({id});
+
+        if (colection == 'libros'){
+            delInv(id)
+        }
 
         res.json({
             msg : "Documento eliminado exitosamente"
