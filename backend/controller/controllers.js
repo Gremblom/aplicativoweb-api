@@ -23,6 +23,7 @@ const get = async (req, res)=>{
                     autor : 1,
                     sinopsis : 1,
                     estado : 1,
+                    id : 1,
                     genero : "$genero.nombre"
                 }}
             ]).toArray();
@@ -112,11 +113,15 @@ const update = async (req, res)=>{
         const db = await conexion();
 
         const {colection} = req.params;
-        const id = parseInt(req.params.id);
+        const idP = parseInt(req.params.id);
+
+        const {id, ...data} = req.body;
+
+        console.log(data);
 
         const coleccion = db.collection(colection);
 
-        await coleccion.findOneAndUpdate({id}, {$set : req.body});
+        await coleccion.findOneAndUpdate({id : idP}, {$set : data});
 
         res.json({
             msg : "Documento actualizado"
@@ -134,6 +139,8 @@ const deleter = async (req, res)=>{
         const id = parseInt(req.params.id);
 
         const coleccion = db.collection(colection);
+
+        console.log(id);
 
         await coleccion.findOneAndDelete({id});
 

@@ -1,9 +1,36 @@
 import React, {useState} from 'react';
+import {Form} from 'semantic-ui-react';
+import {Link} from 'react-router-dom';
+import axios from 'axios';
 
 import '../../assets/form.css';
-import {Read, Create} from "../API/API";
+import {Read} from "../API/API";
 
 export default function CreateForm(){
+
+    const Create = async ()=>{
+        localStorage.setItem('reload', true)
+
+        try {
+            const newDoc = {
+                nombre,
+                genero,
+                autor,
+                sinopsis,
+                estado,
+                id : cantBooks.length + 1
+            }
+
+            axios.post(`http://localhost:6996/api/libros/new`, newDoc)
+                .then(()=>{
+                    window.location.reload();
+                })
+
+        } catch (error) {
+            console.log('Error', error);
+        }
+        
+    }
 
     const APIData = Read('generos');
     const cantBooks = Read('libros');
@@ -14,24 +41,11 @@ export default function CreateForm(){
     const [sinopsis, setSinopsis] = useState('');
     const [estado, setEstado] = useState('');
 
-    function preparePost(){
-        const newDoc = {
-            nombre,
-            genero,
-            autor,
-            sinopsis,
-            estado,
-            id : cantBooks.length + 1
-        }
-
-        Create('libros', newDoc);
-    }
-
     return(
         <div className="form-container">
             <div className="form-box">
             <h2>New Book</h2>
-            <form>
+            <Form>
                 <div className="user-box">
                     <input type="text" name="" onChange={(e) => setNombre(e.target.value)} />
                     <label>Nombre</label>
@@ -57,8 +71,8 @@ export default function CreateForm(){
                     <input type="text" name="" onChange={(e)=> setEstado(e.target.value)} />
                     <label>Estado</label>
                 </div>
-                <a href="#" onClick={() => preparePost()}>Submit</a>
-            </form>
+                <Link to='/libros' type='submit' onClick={Create} >Submit</Link>
+            </Form>
             </div>
         </div>
     )

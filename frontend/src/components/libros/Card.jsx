@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Link} from "react-router-dom";
+import axios from "axios";
 
 import '../../assets/card.css';
 import {Read} from '../API/API';
@@ -7,7 +8,15 @@ import {Read} from '../API/API';
 export default function Card(){
 
   const APIData = Read('libros');
-  
+
+  const Borrar = (coleccion, id)=>{
+
+    axios.delete(`http://localhost:6996/api/${coleccion}/del/${id}`)
+      .then(()=>{
+        window.location.reload();
+      })
+  } 
+
   return(
     <div className='bodyContainer'>
       <div>
@@ -23,8 +32,17 @@ export default function Card(){
               <p className="para">{data.sinopsis}</p>
               <p className="para">{data.estado}</p>
               <div className='buttons'>
-                <Link to="/createBook"><button className="btn">Delete</button></Link>
-                <button className="btn">Update</button>
+                <button className="btn" onClick={() => Borrar('libros', data.id)}>Delete</button>
+                <Link to='/updateBook' className="btn" onClick={() => {
+                  const keepVal = localStorage.getItem('reload');
+                  localStorage.clear();
+                  localStorage.setItem('reload', keepVal);
+                  localStorage.setItem('id', parseInt(data.id));
+                  localStorage.setItem('nombre', data.nombre);
+                  localStorage.setItem('genero', data.genero);
+                  localStorage.setItem('autor', data.autor);
+                  localStorage.setItem('estado', data.estado);
+                }}>Update</Link>
               </div>
             </div>
           </div>

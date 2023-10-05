@@ -40,8 +40,8 @@ class Server{
     }
 
     middlewares(){
-        this.app.use(cors(this.configCors));
         this.app.use(express.json());
+        this.app.use(cors(this.configCors));
         this.app.use("/api-doc", swaggerUI.serve, swaggerUI.setup(swaggerDocument));
     }
 
