@@ -13,4 +13,4 @@
 [`Swagger`](http://localhost:6996/api-doc/)
 
 ## - Diagrama de la base de datos
-[``](./readmeImg/Diagrama%20Libreria.png);
+[`Diagrama`](./readmeImg/Diagrama%20Libreria.png);
