@@ -12,14 +12,33 @@
       }
     ],
     "paths":{
-        "/books/all":{
+        "/{api}/{coleccion}/all":{
             "get":{
                 "tags":[
-                    "books"
+                    "get"
                 ],
-                "summary": "Get all books",
-                "description": "Obtiene una lista con todos los libros registrados",
-                "parameters": [],
+                "summary": "Obtener todos los elementos de la colección",
+                "description": "Obtiene una lista con todos los documentos de las colecciones que tienen un procesado estándar en el backend",
+                "parameters": [
+                    {
+                        "name": "coleccion",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["generos", "libros", "usuarios"]
+                        }
+                    },
+                    {
+                        "name": "api",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["api"]
+                        }
+                    }
+                ],
                 "responses":{
                     "200":{
                         "description": "Ok",
@@ -34,8 +53,10 @@
                                         "books": [
                                             {
                                                 "_id": "1234",
+                                                "id": 1,
                                                 "nombre": "Harry Potter",
                                                 "genero": "Fantasia",
+                                                "autor": "J.K Rowling",
                                                 "sinopsis": "La historia de Harry en su travesía por Hogwarts",
                                                 "estado": "Disponible"
                                             }
@@ -60,6 +81,277 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/{api}/{colection}/all": {
+            "get":{
+                "tags":[
+                    "get"
+                ],
+                "summary": "Obtener todos los elementos de la colección",
+                "description": "Obtiene una lista con todos los documentos de las colecciones que necesitan un procesado especial en el backend",
+                "parameters": [
+                    {
+                        "name": "colection",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["rentas", "stockLibros"]
+                        }
+                    },
+                    {
+                        "name": "api",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["apiSpfc"]
+                        }
+                    }
+                ],
+                "responses":{
+                    "200":{
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type" : "array",
+                                    "items": {
+                                        "$ref" : "no schema defined"
+                                    },
+                                    "example": {
+                                        "books": [
+                                            {
+                                                "_id": "1234",
+                                                "id_libro": 16,
+                                                "id": 1,
+                                                "cantidad_disponible": 8,
+                                                "precio_unitario": 12.99
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Not ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "no schema defined"
+                                    },
+                                    "example":{
+                                        "error": "(Error message displayed)"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/{api}/{coleccion}/new/":{
+            "post": {
+                "tags":[
+                    "post"
+                ],
+                "summary": "Insertar un nuevo documento",
+                "description": "Inserta un nuevo documento a la colección indicada (Referenciar Schemas si la request no es válida)",
+                "parameters":[
+                    {
+                        "name": "api",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["api"]
+                        }
+                    },
+                    {
+                        "name": "coleccion",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["generos", "libros", "usuarios", "rentas", "stockLibros"]
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "oneOf": [
+                                    {
+                                        "$ref": "#/components/schemas/Book",
+                                        "x-discriminator-value": "libros"
+                                    },
+                                    {
+                                        "$ref": "#components/schemas/Genre",
+                                        "x-discriminator-value": "generos"
+                                    },
+                                    {
+                                        "$ref": "#/components/schemas/User",
+                                        "x-discriminator-value": "usuarios"
+                                    },
+                                    {
+                                        "$ref": "#/components/schemas/Rent",
+                                        "x-discriminator-value": "rentas"
+                                    },
+                                    {
+                                        "$ref": "#/components/schemas/Stock",
+                                        "x-discriminator-value": "stockLibros"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Documento creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "no schema defined"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Ocurrió un error inesperado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "no schema defined"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Book": {
+                "type": "object",
+                "properties": {
+                    "_id":{
+                        "type": "string",
+                        "required": false
+                    },
+                    "nombre": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "genero": {
+                        "type": "number",
+                        "required": true
+                    },
+                    "autor": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "sinopsis": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "estado": {
+                        "type": "string",
+                        "required": true,
+                        "enum": ["Disponible", "No Disponible"]
+                    },
+                    "id": {
+                        "type": "number",
+                        "required": true
+                    }
+                }
+            },
+            "Genre": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "required": false
+                    },
+                    "nombre": {
+                        "type": "string",
+                        "required": true
+                    }
+                }
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "required": false
+                    },
+                    "nombre": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "correo": {
+                        "type": "string",
+                        "required": true
+                    },
+                    "edad": {
+                        "type": "number",
+                        "required": true
+                    }
+                }
+            },
+            "Rent": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "required": false
+                    },
+                    "id": {
+                        "type": "number",
+                        "required": true
+                    },
+                    "id_usuario": {
+                        "type": "number",
+                        "required": true
+                    },
+                    "id_libro": {
+                        "type": "number",
+                        "required": "true"
+                    }
+                }
+            },
+            "Stock": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "required": false
+                    },
+                    "id_libro": {
+                        "type": "number",
+                        "required": true
+                    },
+                    "id": {
+                        "type": "number",
+                        "required": true
+                    },
+                    "cantidad_disponible": {
+                        "type": "number",
+                        "required": true
+                    },
+                    "precio_unitario": {
+                        "type": "number",
+                        "required": true
                     }
                 }
             }
