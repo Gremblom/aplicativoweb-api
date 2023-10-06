@@ -15,7 +15,7 @@
         "/{api}/{coleccion}/all":{
             "get":{
                 "tags":[
-                    "get"
+                    "Get"
                 ],
                 "summary": "Obtener todos los elementos de la colección",
                 "description": "Obtiene una lista con todos los documentos de las colecciones que tienen un procesado estándar en el backend",
@@ -88,7 +88,7 @@
         "/{api}/{colection}/all": {
             "get":{
                 "tags":[
-                    "get"
+                    "Get"
                 ],
                 "summary": "Obtener todos los elementos de la colección",
                 "description": "Obtiene una lista con todos los documentos de las colecciones que necesitan un procesado especial en el backend",
@@ -159,7 +159,7 @@
         "/{api}/{coleccion}/new/":{
             "post": {
                 "tags":[
-                    "post"
+                    "Post"
                 ],
                 "summary": "Insertar un nuevo documento",
                 "description": "Inserta un nuevo documento a la colección indicada (Referenciar Schemas si la request no es válida)",
@@ -234,6 +234,124 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/{api}/{coleccion}/del/{id}": {
+            "delete": {
+                "tags": [
+                    "Delete"
+                ],
+                "summary": "Eliminar un documento",
+                "description": "Eliminar un documento de la colección especificada según su id",
+                "parameters": [
+                    {
+                        "name": "api",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["api"]
+                        }
+                    },
+                    {
+                        "name": "coleccion",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["libros", "usuarios", "rentas", "generos", "stockLibros"]
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "No content",
+                        "content": {}
+                    },
+                    "400": {
+                        "description": "No encontrado",
+                        "content": {}
+                    }
+                }
+            }
+        },
+        "/{api}/{coleccion}/upd/{id}":{
+            "patch": {
+                "tags": [
+                    "Patch"
+                ],
+                "summary": "Actualizar un documento",
+                "description": "Actualiza un documento según la colección y la id proporcionados",
+                "parameters": [
+                    {
+                        "name": "api",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["api"]
+                        }
+                    },
+                    {
+                        "name": "coleccion",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["libros", "usuarios", "generos"]
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }                    
+                ],
+                "requestBody": {
+                    "description": "Nuevos datos para la actualización",
+                    "required": true,
+                    "content": {
+                        "application/json" : {
+                            "schema": {
+                                "oneOf": [
+                                    {
+                                        "$ref": "#/components/schemas/Book",
+                                        "x-discriminator-value": "libros"
+                                    },
+                                    {
+                                        "$ref": "#/components/schemas/User",
+                                        "x-discriminator-value": "usuarios"
+                                    },
+                                    {
+                                        "$ref": "#components/schemas/Genre",
+                                        "x-discriminator-value": "generos"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "No content",
+                        "content": {}
+                    },
+                    "400":{
+                        "description": "No encontrado",
+                        "content": {}
                     }
                 }
             }

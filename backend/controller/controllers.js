@@ -168,8 +168,6 @@ const update = async (req, res)=>{
 
         const {id, ...data} = req.body;
 
-        console.log(data);
-
         const coleccion = db.collection(colection);
 
         await coleccion.findOneAndUpdate({id : idP}, {$set : data});
