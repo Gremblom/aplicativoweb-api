@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 
 function Read(coleccion){
@@ -9,14 +9,7 @@ function Read(coleccion){
             .then((response)=>{
                 setAPIData(response.data);
             })
-    }, []);
-
-    const  getData = ()=>{
-        axios.get(`http://localhost:6996/apiSpfc/${coleccion}/all`)
-            .then((getData)=>{
-                setAPIData(getData.data);
-            })
-    }
+    }, [coleccion]);
 
     return APIData;
 }

@@ -9,14 +9,7 @@ function Read(coleccion){
             .then((response)=>{
                 setAPIData(response.data);
             })
-    }, []);
-
-    const  getData = ()=>{
-        axios.get(`http://localhost:6996/api/${coleccion}/all`)
-            .then((getData)=>{
-                setAPIData(getData.data);
-            })
-    }
+    }, [coleccion]);
 
     return APIData;
 }

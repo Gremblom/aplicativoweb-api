@@ -51,7 +51,7 @@ export default function CreateForm(){
                     <label>Nombre</label>
                 </div>
                 <div className="user-box">
-                    <select onChange={(e)=> setGenero(e.target.value)}>
+                    <select required onChange={(e)=> setGenero(e.target.value)}>
                         {APIData.map((data)=>{
                             return(
                                 <option value={data.id}>{data.nombre}</option>
