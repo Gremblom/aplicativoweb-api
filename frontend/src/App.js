@@ -10,6 +10,7 @@ import UserCard from "./components/usuarios/Card";
 import UserForm from "./components/usuarios/CreateForm";
 
 import RentaCard from "./components/rentas/Card";
+import RentaForm from "./components/rentas/CreateForm";
 
 import GeneroCard from "./components/generos/Card";
 import GeneroForm from "./components/generos/CreateForm";
@@ -41,6 +42,7 @@ function App() {
         </div>
         <div>
           <Route exact path='/rentas' component={RentaCard} />
+          <Route exact path='/createRentas' component={RentaForm} />
         </div>
         <div>
           <Route exact path='/generos' component={GeneroCard} />

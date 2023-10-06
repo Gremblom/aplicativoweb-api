@@ -75,6 +75,24 @@ const newStock = async (data)=>{
     }
 }
 
+const checkStock = async (id)=>{
+    try {
+        const db = await conexion();
+        const coleccion = db.collection('stockLibros');
+
+        const isInStock = await coleccion.find({id_libro : id}).toArray();
+
+        if (isInStock[0].cantidad_disponible == 0){
+            return false;
+        } else {
+            await coleccion.updateOne({id_libro : id}, {$inc : {cantidad_disponible : -1}});
+            return true;
+        }
+    } catch (error) {
+        return false   
+    }
+}
+
 const post = async (req, res)=>{
     try {
         const db = await conexion();
@@ -123,6 +141,18 @@ const post = async (req, res)=>{
             const newGenre = await coleccion.insertOne(req.body);
 
             res.json(newGenre);
+        } else if (colection == 'rentas'){
+            const bookStock = checkStock(req.body.id_libro);
+
+            if (bookStock){
+                const newRent = await coleccion.insertOne(req.body);
+
+                res.json(newRent);
+            } else {
+                res.json({
+                    ms : "El libro no se encuentra disponible en stock"
+                })
+            }
         }
     } catch (error) {
         res.stauts(400).json(error.message);
@@ -164,6 +194,19 @@ const delInv = async (id)=>{
     }
 }
 
+const updBookStock = async (id)=>{
+    try {
+        const db = await conexion();
+        const coleccion = db.collection('stockLibros');
+
+        await coleccion.updateOne({id_libro : id}, {$inc : {cantidad_disponible : +1}});
+
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
 const deleter = async (req, res)=>{
     try {
         const db = await conexion();
@@ -171,19 +214,43 @@ const deleter = async (req, res)=>{
         const {colection} = req.params;
         const id = parseInt(req.params.id);
 
-        const coleccion = db.collection(colection);
-
-        console.log(id);
-
-        await coleccion.findOneAndDelete({id});
-
         if (colection == 'libros'){
-            delInv(id)
-        }
+            const coleccion = db.collection(colection);
 
-        res.json({
-            msg : "Documento eliminado exitosamente"
-        });
+            await coleccion.findOneAndDelete({id});
+
+            delInv(id);
+
+            res.json({
+                msg : "Documento eliminado exitosamente"
+            });
+        } else if (colection == 'rentas') {
+            const coleccion = db.collection(colection);
+
+            const rent = await coleccion.find({id}).toArray();
+
+            const bookStock = await updBookStock(rent[0].id_libro);
+
+            if (bookStock){
+                await coleccion.findOneAndDelete({id});
+
+                res.json({
+                    ms : "Documento eliminado exitosamente"
+                })
+            } else {
+                res.json({
+                    ms : 'Ha ocurrido un error inesperado'
+                })
+            }
+        } else {
+            const coleccion = db.collection(colection);
+
+            await coleccion.findOneAndDelete({id});
+
+            res.json({
+                msg : "Documento eliminado exitosamente"
+            });
+        }
     } catch (error) {
         res.status(400).json(error.message);
     }
