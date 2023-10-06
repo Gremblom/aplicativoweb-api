@@ -7,3 +7,7 @@
 
 ## - frontend
 - "npm start" para ejecutar la SPA de React
+
+## - Documentación
+- Hay que tener el servidor backend ejecutandose para acceder a la documentación
+[`Swagger`](http://localhost:6996/api-doc/)
